@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) Microsoft Open Technologies, Inc.  All Rights Reserved. 
+ Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+-->
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" 
+    id="com.msopentech.authDialog" version="0.1.0-dev">
+
+    <name>Authentication Dialog</name>
+    <description>Adds support for authentication dialogs into Apache Cordova</description>
+
+    <license>Apache 2.0</license>
+    <keywords>microsoft, authentication, windows, ntlm</keywords>
+    <repo>https://github.com/msopentech/cordova-plugin-auth-dialog</repo>
+    <issue>https://github.com/msopentech/cordova-plugin-auth-dialog/issues</issue>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="WindowsAuth"> 
+                <param name="android-package" value="com.msopentech.windowsauth.WindowsAuth"/>
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+        <source-file src="src/android/WindowsAuth.java" target-dir="src/com/msopentech/windowsauth" />
+        <source-file src="src/android/HttpAuthenticationDialog.java" target-dir="src/com/msopentech/windowsauth" />
+
+        <resource-file src="src/android/res/layout/http_authentication.xml" target="res/layout/http_authentication.xml" />
+        <resource-file src="src/android/res/values/windowsauth-strings.xml" target="res/values/windowsauth-strings.xml" />
+    </platform>
+</plugin>
