@@ -8,9 +8,10 @@ public class WindowsAuth extends CordovaPlugin {
     @Override
     public void initialize(final CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
-
-        CordovaWebViewClient webViewClient = webView.getWebViewClient();
-        webViewClient.setHttpAuthRequestHandler(new HttpAuthRequestHandler() {
+        
+        if (!(cordova instanceof CordovaActivity)) return;
+        
+        ((CordovaActivity)cordova).setHttpAuthRequestHandler(new HttpAuthRequestHandler() {
             @Override
             public void handle(WebView view, final HttpAuthHandler handler, String host, String realm) {
 
