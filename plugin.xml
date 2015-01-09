@@ -28,4 +28,22 @@
         <resource-file src="src/android/res/layout/http_authentication.xml" target="res/layout/http_authentication.xml" />
         <resource-file src="src/android/res/values/windowsauth-strings.xml" target="res/values/windowsauth-strings.xml" />
     </platform>
+
+    <platform name="wp8">
+        <config-file target="Properties/WMAppManifest.xml" parent="/Deployment/App/Capabilities">
+            <Capability Name="ID_CAP_NETWORKING"/>
+        </config-file>
+
+        <config-file target="config.xml" parent="/*">
+            <feature name="AuthDialogs">
+                <param name="wp-package" value="AuthDialogs"/>
+                <param name="onload" value="true" /> 
+            </feature>
+        </config-file>
+
+        <source-file src="src/wp/AuthDialogs.cs" />
+        <source-file src="src/wp/HttpAuthRequestHandler.cs" />
+        <source-file src="src/wp/NotificationBox.xaml" />
+        <source-file src="src/wp/NotificationBox.xaml.cs" />
+    </platform>
 </plugin>
