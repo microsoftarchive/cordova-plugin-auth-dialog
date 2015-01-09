@@ -46,4 +46,11 @@
         <source-file src="src/wp/NotificationBox.xaml" />
         <source-file src="src/wp/NotificationBox.xaml.cs" />
     </platform>
+
+    <platform name="windows">
+        <js-module name="AuthDialogs" src="www/AuthDialogs.js">
+            <runs />
+        </js-module>
+    </platform>
+
 </plugin>
