@@ -19,23 +19,38 @@ function requestCredentials(uri, callback) {
     }
 
     var authDialog = document.createElement('div');
-    authDialog.style.cssText = "position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: black; text-align: left; color: white";
+    authDialog.style.cssText = "position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: black; color: white; text-transform: none; font-family: Segoe; overflow: hidden;";
 
-    authDialog.innerHTML  = '<h1>Authorization</h1></br>';
-    authDialog.innerHTML += '<h2>Host ' + uri + ' requests credentials</h2></br>';
-    authDialog.innerHTML += '<input type="text" id="username"></br>';
-    authDialog.innerHTML += '<input type="text" id="password"></br>';
-    authDialog.innerHTML += '<button id="login">Login</button>';
+    authDialog.innerHTML = "";
+
+    authDialog.innerHTML +=
+        '<div style="padding: 0px 12px;">' +
+        '<h1 style="font-size: 28pt; font-weight: 300; letter-spacing: 0; line-height: 1.1429; text-align: left;">Sign in</h1>' +
+        '</div>';
+
+    authDialog.innerHTML +=
+        '<div style="font-size: 15pt; font-weight: 500; line-height: 1.3636; padding: 0px 12px;">' +
+        '<p>Website</br>' + uri + '</p>' +
+        '<span style="font-size: 10pt; font-weight: 300; line-height: 1.3636;">Username:</span></br>' +
+        '<input type="text" id="username" style="-ms-user-select: element; min-height:  38px; border-width:  3px; border-style: solid; width: 100%;"></br>' +
+        '<span style="font-size: 10pt; font-weight: 300; line-height: 1.3636;">Password:</span></br>' +
+        '<input type="text" id="password" style="-ms-user-select: element; min-height:  38px; border-width:  3px; border-style: solid; width: 100%;"></br>' +
+            '<div style="text-align: right; margin: auto;">' + 
+            '<button id="login" style="color: white; min-height: 39px; min-width:  108px; padding:  0px 6px; border: white solid 2.25px; background-clip: padding-box; max-width: 100%; margin: 12px; font-size: 14pt; font-weight: 600; background-color: black;">Login</button>' +
+            '<button id="cancel" style="color: white; min-height: 39px; min-width:  108px; padding:  0px 6px; border: white solid 2.25px; background-clip: padding-box; max-width: 100%; margin: 12px; font-size: 14pt; font-weight: 600; background-color: black;">Cancel</button>' +
+            '</div>' + 
+        '</div>';
 
     document.body.appendChild(authDialog);
 
     var loginButton = document.getElementById('login');
+    var cancelButton = document.getElementById('cancel');
     var usernameField = document.getElementById('username');
     var passwordField = document.getElementById('password');
 
     // TODO: Doesn't work for WP8.1, need to find workaround
-    document.addEventListener('backbutton', function () {
-        document.removeEventListener('backbutton', this);
+    cancelButton.addEventListener('click', function () {
+        document.body.removeChild(authDialog);
         callback && callback({ username: username, password: password });
     });
 
@@ -147,12 +162,14 @@ function bootstrapXHR(win) {
                     self.wrappedXHR.onreadystatechange = null;
                     // Then ask for credentials and do magic
                     requestCredentials(self._url, function (creds) {
-                        // Create an authorization request and wrap new XHR with credentials supplied
-                        self.wrappedXHR = new aliasXHR();
-                        self.wrappedXHR.open(self._reqType, self._url, self.isAsync, creds.username, creds.password);
-                        // and bind onreadystatechange event handler to new XHR
-                        self.wrappedXHR.onreadystatechange = onreadystatechangeListener;
-                        self.wrappedXHR.send(self._data);
+                        if (creds.username && creds.password) {
+                            // Create an authorization request and wrap new XHR with credentials supplied
+                            self.wrappedXHR = new aliasXHR();
+                            self.wrappedXHR.open(self._reqType, self._url, self.isAsync, creds.username, creds.password);
+                            // and bind onreadystatechange event handler to new XHR
+                            self.wrappedXHR.onreadystatechange = onreadystatechangeListener;
+                            self.wrappedXHR.send(self._data);
+                        }
                     });
                 } else {
                     self.changeReadyState(e.target.readyState);
