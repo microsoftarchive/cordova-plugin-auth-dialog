@@ -13,16 +13,19 @@
     self.userName = [command.arguments objectAtIndex:1];
     self.password = [command.arguments objectAtIndex:2];
     self.allowBypassAuth = [[command.arguments objectAtIndex:3] boolValue];
-    
+
     self.callbackId = command.callbackId;
-    
+
     NSLog(@"AuthDialog: authenticate %@", self.uri);
-    
+
     // large timout is used so that we have enough time to request user name and password
-    NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.uri]
+    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.uri]
                                              cachePolicy:NSURLRequestUseProtocolCachePolicy
                                          timeoutInterval:60000.0];
-    
+
+    // use HEAD since it is faster than actial data retrieving (GET)
+    [request setHTTPMethod:@"HEAD"];
+
     [NSURLConnection  connectionWithRequest:request delegate:self];
 }
 
@@ -42,13 +45,15 @@
     
     NSInteger statusCode = [((NSHTTPURLResponse *)response) statusCode];
     
-    if (statusCode == 200) {
+    // 405 means 'Mehod not allowed' which is totally ok to understand
+    // we have successfully passed authentication
+    if (statusCode == 200 || statusCode == 405) {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     } else {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:
                         [NSHTTPURLResponse localizedStringForStatusCode: statusCode]];
     }
-    
+
     [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
 }
 
@@ -57,7 +62,7 @@
     return [authenticationMethod isEqualToString:NSURLAuthenticationMethodNTLM] ||
         [authenticationMethod isEqualToString:NSURLAuthenticationMethodHTTPBasic] ||
         [authenticationMethod isEqualToString:NSURLAuthenticationMethodHTTPDigest];
-    
+
 }
 
 CredentialsViewController * credentialsViewController;
@@ -65,7 +70,7 @@ CredentialsViewController * credentialsViewController;
 - (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
     NSLog(@"AuthDialog: willSendRequestForAuthenticationChallenge %@", challenge.protectionSpace);
-    
+ 
     // if no cridentials are passed during first authentication attempt then
     // try to pass challenge automatically (using cached cridentials)
     // this makes it possible to avoid passing cridentials every app start
