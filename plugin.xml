@@ -30,6 +30,11 @@
     </platform>
 
     <platform name="wp8">
+
+        <js-module name="AuthDialogs" src="www/AuthDialogs.js">
+            <runs />
+        </js-module>
+
         <config-file target="Properties/WMAppManifest.xml" parent="/Deployment/App/Capabilities">
             <Capability Name="ID_CAP_NETWORKING"/>
         </config-file>

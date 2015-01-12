@@ -1,14 +1,28 @@
 
+/*jshint -W030 */
+/*global WinJS, cordova*/
+
+/**
+ * Shows UI for entering credentials and calls callback with credentials supplied.
+ * @param uri       Uri that will be shown in credentials dialog
+ * @param callback  Callback method
+ */
 function requestCredentials(uri, callback) {
 
     var username, password;
 
-    
+    // In case of Windows phone 8 reuse native authentication dialog
+    if (cordova.platformId === 'windowsphone') {
+        var exec = cordova.require('cordova/exec');
+        exec(callback, null, 'AuthDialogs', 'requestCredentials', [uri]);
+        return;
+    }
+
     var authDialog = document.createElement('div');
     authDialog.style.cssText = "position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: black; text-align: left; color: white";
 
-    authDialog.innerHTML  = "<h1>Authorization</h1></br>";
-    authDialog.innerHTML += "<h2>Host " + uri + " requests credentials</h2></br>";
+    authDialog.innerHTML  = '<h1>Authorization</h1></br>';
+    authDialog.innerHTML += '<h2>Host ' + uri + ' requests credentials</h2></br>';
     authDialog.innerHTML += '<input type="text" id="username"></br>';
     authDialog.innerHTML += '<input type="text" id="password"></br>';
     authDialog.innerHTML += '<button id="login">Login</button>';
@@ -31,10 +45,13 @@ function requestCredentials(uri, callback) {
         document.body.removeChild(authDialog);
         callback && callback({ username: username, password: password });
     });
-
 }
 
-(function (win) {
+/**
+ * Bootstarapper for wrapping XHR object
+ * Adds transparent https authentication support for all XHRs
+ */
+function bootstrapXHR(win) {
 
     var aliasXHR = win.XMLHttpRequest;
 
@@ -47,7 +64,7 @@ function requestCredentials(uri, callback) {
     XHRShim.LOADING = 3;
     XHRShim.DONE = 4;
     XHRShim.prototype = {
-        isAsync: false,
+        isAsync: true,
         onreadystatechange: null,
         readyState: 0,
         _url: '',
@@ -61,7 +78,7 @@ function requestCredentials(uri, callback) {
         open: function (reqType, uri, isAsync, user, password) {
             this._reqType = reqType;
             this._url = uri;
-            this.isAsync = isAsync;
+            this.isAsync = isAsync === false ? false : true;
             this.wrappedXHR = new aliasXHR();
             var self = this;
             if (this.timeout > 0) {
@@ -113,7 +130,7 @@ function requestCredentials(uri, callback) {
             });
             Object.defineProperty(this, 'responseType', {
                 set: function (val) {
-                    return this.wrappedXHR.responseType = val;
+                    return (this.wrappedXHR.responseType = val);
                 }
             });
             this.getResponseHeader = function (header) {
@@ -123,29 +140,20 @@ function requestCredentials(uri, callback) {
                 return this.wrappedXHR.getAllResponseHeaders();
             };
             this.wrappedXHR.onreadystatechange = function onreadystatechangeListener(e) {
-
                 // Magic is here :)
                 // Try to catch HTTP 401 code and resend an authorized request then
-
-                console.log('INTERNAL: ' + e.target.readyState + ' : ' + e.target.status);
                 if (e.target.status && e.target.status === 401) {
-
-                    // Got 401?
-                    // First remove an existing onreadystatechange event handler from stale XHR
+                    // Got 401? First remove an existing onreadystatechange event handler from stale XHR
                     self.wrappedXHR.onreadystatechange = null;
-                    // Then ask for credentials
+                    // Then ask for credentials and do magic
                     requestCredentials(self._url, function (creds) {
-
-                        // TODO: check if credentials is not null
-                        // Then create an authorization request and wrap new XHR with credentials supplied
+                        // Create an authorization request and wrap new XHR with credentials supplied
                         self.wrappedXHR = new aliasXHR();
                         self.wrappedXHR.open(self._reqType, self._url, self.isAsync, creds.username, creds.password);
-                        self.wrappedXHR.send(self._data);
-                    
                         // and bind onreadystatechange event handler to new XHR
                         self.wrappedXHR.onreadystatechange = onreadystatechangeListener;
+                        self.wrappedXHR.send(self._data);
                     });
-
                 } else {
                     self.changeReadyState(e.target.readyState);
                 }
@@ -154,8 +162,8 @@ function requestCredentials(uri, callback) {
             return this.wrappedXHR.open(reqType, uri, isAsync, user, password);
         },
         changeReadyState: function (newState) {
-            this.readyState = newState;
             var evt;
+            this.readyState = newState;
             if (this.onreadystatechange) {
                 // mimic simple 'readystatechange' event which should be passed as per spec
                 evt = { type: 'readystatechange', target: this, timeStamp: new Date().getTime() };
@@ -197,5 +205,11 @@ function requestCredentials(uri, callback) {
             return this.wrappedXHR.send(data);
         }
     };
+}
 
-})(window);
+var isWindowsPhone = ((cordova.platformId === 'windows') && WinJS.Utilities.isPhone) || cordova.platformId === 'windowsphone';
+
+if (isWindowsPhone) {
+    bootstrapXHR(window);
+}
+
