@@ -66,11 +66,18 @@ namespace WPCordovaClassLib.Cordova.Commands
 
             Deployment.Current.Dispatcher.BeginInvoke(async () =>
             {
+                string creds;
                 var handler = new HttpAuthRequestHandler();
-                var credentials = await handler.requestCredentials(uri);
-                var creds = JSON.JsonHelper.Serialize(credentials);
-
-                DispatchCommandResult(new PluginResult(PluginResult.Status.OK, creds));
+                try
+                {
+                    var credentials = await handler.requestCredentials(uri);
+                    creds = JSON.JsonHelper.Serialize(credentials);
+                    DispatchCommandResult(new PluginResult(PluginResult.Status.OK, creds));
+                }
+                catch (System.Threading.Tasks.TaskCanceledException)
+                {
+                    DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR));
+                }
             });
         }
     }

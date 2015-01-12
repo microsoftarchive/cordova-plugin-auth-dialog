@@ -79,6 +79,7 @@ namespace io.cordova.hellocordova.Plugins.com.msopentech.authdialogs
             requestCredentialsTaskCompletionSource.TrySetCanceled();
 
             Deployment.Current.Dispatcher.BeginInvoke(() => layoutRoot.Children.Remove(notifyBox));
+            e.Cancel = true;
 
             notifyBox.Login.Click -= this.loginHandler;
             layoutPage.BackKeyPress -= this.cancelHandler;

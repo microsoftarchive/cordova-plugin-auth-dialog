@@ -7,16 +7,16 @@
  * @param uri       Uri that will be shown in credentials dialog
  * @param callback  Callback method
  */
-function requestCredentials(uri, callback) {
-
-    var username, password;
-
+function requestCredentials(uri, successCB, errorCB) {
+    
     // In case of Windows phone 8 reuse native authentication dialog
     if (cordova.platformId === 'windowsphone') {
         var exec = cordova.require('cordova/exec');
-        exec(callback, null, 'AuthDialogs', 'requestCredentials', [uri]);
+        exec(successCB, errorCB, 'AuthDialogs', 'requestCredentials', [uri]);
         return;
     }
+
+    var username, password;
 
     var authDialog = document.createElement('div');
     authDialog.style.cssText = "position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: black; color: white; text-transform: none; font-family: Segoe; overflow: hidden;";
@@ -51,14 +51,12 @@ function requestCredentials(uri, callback) {
     // TODO: Doesn't work for WP8.1, need to find workaround
     cancelButton.addEventListener('click', function () {
         document.body.removeChild(authDialog);
-        callback && callback({ username: username, password: password });
+        errorCB && errorCB({ username: username, password: password });
     });
 
     loginButton.addEventListener('click', function () {
-        username = usernameField.value;
-        password = passwordField.value;
         document.body.removeChild(authDialog);
-        callback && callback({ username: username, password: password });
+        successCB && successCB({ username: usernameField.value, password: passwordField.value });
     });
 }
 
@@ -162,14 +160,12 @@ function bootstrapXHR(win) {
                     self.wrappedXHR.onreadystatechange = null;
                     // Then ask for credentials and do magic
                     requestCredentials(self._url, function (creds) {
-                        if (creds.username && creds.password) {
-                            // Create an authorization request and wrap new XHR with credentials supplied
-                            self.wrappedXHR = new aliasXHR();
-                            self.wrappedXHR.open(self._reqType, self._url, self.isAsync, creds.username, creds.password);
-                            // and bind onreadystatechange event handler to new XHR
-                            self.wrappedXHR.onreadystatechange = onreadystatechangeListener;
-                            self.wrappedXHR.send(self._data);
-                        }
+                        // Create an authorization request and wrap new XHR with credentials supplied
+                        self.wrappedXHR = new aliasXHR();
+                        self.wrappedXHR.open(self._reqType, self._url, self.isAsync, creds.username, creds.password);
+                        // and bind onreadystatechange event handler to new XHR
+                        self.wrappedXHR.onreadystatechange = onreadystatechangeListener;
+                        self.wrappedXHR.send(self._data);
                     });
                 } else {
                     self.changeReadyState(e.target.readyState);
