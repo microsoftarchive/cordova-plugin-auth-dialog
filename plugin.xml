@@ -14,7 +14,6 @@
     <repo>https://github.com/msopentech/cordova-plugin-auth-dialog</repo>
     <issue>https://github.com/msopentech/cordova-plugin-auth-dialog/issues</issue>
 
-    <!-- android -->
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="WindowsAuth"> 
@@ -27,6 +26,21 @@
 
         <resource-file src="src/android/res/layout/http_authentication.xml" target="res/layout/http_authentication.xml" />
         <resource-file src="src/android/res/values/windowsauth-strings.xml" target="res/values/windowsauth-strings.xml" />
+    </platform>
+
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="AuthDialog">
+                <param name="ios-package" value="AuthenticationDialog"/>
+            </feature>
+        </config-file>
+
+        <header-file src="src/ios/AuthenticationDialog.h" />
+        <source-file src="src/ios/AuthenticationDialog.m" />
+
+        <js-module name="AuthDialog" src="src/ios/authDialog.js">
+            <clobbers target="window.authDialog" />
+        </js-module>
     </platform>
 
     <platform name="wp8">
