@@ -29,27 +29,19 @@ var app = {
             SECURED_PAGE = e.target.value;
         }, false);
 
-        // Wrap console.log
-        var origConsoleLog = console.log;
-        console.log = function () {
-            origConsoleLog.apply(null, arguments);
-            app.log.apply(app, arguments);
-        }
-
         document.addEventListener('deviceready', this.onDeviceReady, false);
     },
     // deviceready Event Handler
-    //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         document.getElementById('navigate').addEventListener('click', function () {
             console.log('Navigating to ' + SECURED_PAGE);
+            app.log('Navigating to ' + SECURED_PAGE);
             window.location = SECURED_PAGE;
         });
 
         document.getElementById('xhr').addEventListener('click', function () {
             console.log('Making XHR to ' + SECURED_PAGE);
+            app.log('Making XHR to ' + SECURED_PAGE);
             app.makeXHR(SECURED_PAGE);
         })
     },
@@ -57,13 +49,19 @@ var app = {
         var req = new XMLHttpRequest();
         req.open('GET', host);
         req.onload = function (e) {
-            console.log('Got onload.\nreadyState: ' + e.target.readyState + ', HTTP status: ' + e.target.status);
+            var message = 'Got onload.\nreadyState: ' + e.target.readyState + ', HTTP status: ' + e.target.status;
+            console.log(message);
+            app.log(message);
         };
         req.onerror = function (e) {
-            console.log('Got onerror.\nreadyState: ' + e.target.readyState + ', HTTP status: ' + e.target.status);
+            var message = 'Got onerror.\nreadyState: ' + e.target.readyState + ', HTTP status: ' + e.target.status;
+            console.log(message);
+            app.log(message);
         };
         req.onreadystatechange = function (e) {
-            console.log('Got onreadystatechange.\nreadyState: ' + e.target.readyState + ', HTTP status: ' + e.target.status);
+            var message = 'Got onreadystatechange.\nreadyState: ' + e.target.readyState + ', HTTP status: ' + e.target.status;
+            console.log(message);
+            app.log(message);
         };
         req.send();
     },
