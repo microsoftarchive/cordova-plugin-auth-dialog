@@ -45,7 +45,6 @@ function requestCredentials(uri, successCB, errorCB) {
     var usernameField = document.getElementById('username');
     var passwordField = document.getElementById('password');
 
-    // TODO: Doesn't work for WP8.1, need to find workaround
     cancelButton.addEventListener('click', function () {
         document.body.removeChild(authDialog);
         errorCB && errorCB("Login cancelled");
@@ -223,4 +222,3 @@ var isWindowsPhone = ((cordova.platformId === 'windows') && WinJS.Utilities.isPh
 if (isWindowsPhone) {
     bootstrapXHR(window);
 }
-

@@ -16,6 +16,11 @@ using Microsoft.Phone.Controls;
 using System.Diagnostics;
 using System.Windows;
 
+using WPCordovaClassLib;
+using WPCordovaClassLib.Cordova;
+using WPCordovaClassLib.Cordova.Commands;
+using WPCordovaClassLib.Cordova.JSON;
+
 namespace MSOpenTech.AuthDialog
 {
     public class AuthRequestHandler : BaseCommand
@@ -59,7 +64,7 @@ namespace MSOpenTech.AuthDialog
 
         public void requestCredentials(string jsonArgs)
         {
-            var args = JSON.JsonHelper.Deserialize<string[]>(jsonArgs);
+            var args = JsonHelper.Deserialize<string[]>(jsonArgs);
             var uri = new System.Uri(args[0]);
 
             Deployment.Current.Dispatcher.BeginInvoke(async () =>
@@ -69,7 +74,7 @@ namespace MSOpenTech.AuthDialog
                 try
                 {
                     var credentials = await handler.requestCredentials(uri);
-                    creds = JSON.JsonHelper.Serialize(credentials);
+                    creds = JsonHelper.Serialize(credentials);
                     DispatchCommandResult(new PluginResult(PluginResult.Status.OK, creds));
                 }
                 catch (System.Threading.Tasks.TaskCanceledException)
