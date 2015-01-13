@@ -4,8 +4,9 @@
 
 /**
  * Shows UI for entering credentials and calls callback with credentials supplied.
- * @param uri       Uri that will be shown in credentials dialog
- * @param callback  Callback method
+ * @param uri        Uri that will be shown in credentials dialog
+ * @param successCB  Success callback
+ * @param errorCB    Error callback
  */
 function requestCredentials(uri, successCB, errorCB) {
     
@@ -16,28 +17,24 @@ function requestCredentials(uri, successCB, errorCB) {
         return;
     }
 
-    var username, password;
-
     var authDialog = document.createElement('div');
     authDialog.style.cssText = "position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: black; color: white; text-transform: none; font-family: Segoe; overflow: hidden;";
 
-    authDialog.innerHTML = "";
-
-    authDialog.innerHTML +=
+    authDialog.innerHTML = "" + 
         '<div style="padding: 0px 12px;">' +
-        '<h1 style="font-size: 28pt; font-weight: 300; letter-spacing: 0; line-height: 1.1429; text-align: left;">Sign in</h1>' +
+            '<h1 style="font-size: 28pt; font-weight: 300; letter-spacing: 0; line-height: 1.1429; text-align: left;">Sign in</h1>' +
         '</div>';
 
     authDialog.innerHTML +=
         '<div style="font-size: 15pt; font-weight: 500; line-height: 1.3636; padding: 0px 12px;">' +
-        '<p>Website</br>' + uri + '</p>' +
-        '<span style="font-size: 10pt; font-weight: 300; line-height: 1.3636;">Username:</span></br>' +
-        '<input type="text" id="username" style="-ms-user-select: element; min-height:  38px; border-width:  3px; border-style: solid; width: 100%;"></br>' +
-        '<span style="font-size: 10pt; font-weight: 300; line-height: 1.3636;">Password:</span></br>' +
-        '<input type="text" id="password" style="-ms-user-select: element; min-height:  38px; border-width:  3px; border-style: solid; width: 100%;"></br>' +
+            '<p>Website</br>' + uri + '</p>' +
+            '<span style="font-size: 10pt; font-weight: 300; line-height: 1.3636;">Username:</span></br>' +
+            '<input type="text" id="username" style="-ms-user-select: element; min-height:  38px; border-width:  3px; border-style: solid; width: 100%;"></br>' +
+            '<span style="font-size: 10pt; font-weight: 300; line-height: 1.3636;">Password:</span></br>' +
+            '<input type="text" id="password" style="-ms-user-select: element; min-height:  38px; border-width:  3px; border-style: solid; width: 100%;"></br>' +
             '<div style="text-align: right; margin: auto;">' + 
-            '<button id="login" style="color: white; min-height: 39px; min-width:  108px; padding:  0px 6px; border: white solid 2.25px; background-clip: padding-box; max-width: 100%; margin: 12px; font-size: 14pt; font-weight: 600; background-color: black;">Login</button>' +
-            '<button id="cancel" style="color: white; min-height: 39px; min-width:  108px; padding:  0px 6px; border: white solid 2.25px; background-clip: padding-box; max-width: 100%; margin: 12px; font-size: 14pt; font-weight: 600; background-color: black;">Cancel</button>' +
+                '<button id="login" style="color: white; min-height: 39px; min-width:  108px; padding:  0px 6px; border: white solid 2.25px; background-clip: padding-box; max-width: 100%; margin: 12px; font-size: 14pt; font-weight: 600; background-color: black;">Login</button>' +
+                '<button id="cancel" style="color: white; min-height: 39px; min-width:  108px; padding:  0px 6px; border: white solid 2.25px; background-clip: padding-box; max-width: 100%; margin: 12px; font-size: 14pt; font-weight: 600; background-color: black;">Cancel</button>' +
             '</div>' + 
         '</div>';
 
@@ -51,7 +48,7 @@ function requestCredentials(uri, successCB, errorCB) {
     // TODO: Doesn't work for WP8.1, need to find workaround
     cancelButton.addEventListener('click', function () {
         document.body.removeChild(authDialog);
-        errorCB && errorCB({ username: username, password: password });
+        errorCB && errorCB("Login cancelled");
     });
 
     loginButton.addEventListener('click', function () {
@@ -63,6 +60,7 @@ function requestCredentials(uri, successCB, errorCB) {
 /**
  * Bootstarapper for wrapping XHR object
  * Adds transparent https authentication support for all XHRs
+ * @param win  Object to bootstrap
  */
 function bootstrapXHR(win) {
 

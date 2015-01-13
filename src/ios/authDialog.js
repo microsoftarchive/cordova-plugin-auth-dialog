@@ -17,6 +17,8 @@
  * under the License.
  */
 
+/*global cordova, module*/
+
 var authDialog  = {};
 
 function authenticateOnce (uri, successCallback, errorCallback, userName, password, allowBypassAuth) {
@@ -38,7 +40,7 @@ authDialog.authenticate = function (uri, successCallback, /*optional*/ errorCall
     
     var onError = function (err) {
         
-        if (maxAttempts-- <= 0 || err == "cancelled") {
+        if (maxAttempts-- <= 0 || err === "cancelled") {
             errorCallback(err);
             return;
         }
@@ -47,12 +49,12 @@ authDialog.authenticate = function (uri, successCallback, /*optional*/ errorCall
         // so we should ask user to provide another cridentials so we don't pass user/password
         setTimeout(function() {
              authenticateOnce (uri, successCallback, onError, null, null, false);
-        })
-    }
+        });
+    };
     
     // allowBypass specifies whether app should try to resolve authentication challenge automatically
-    // first (cahched cridentials). This should be done only if no user and password are provided;
-    // this makes it possible to avoid passing cridentials every app start
+    // first (cached cridentials). This should be done only if no user and password are provided;
+    // this makes it possible to avoid passing credentials every app start
     authenticateOnce (uri, successCallback, onError, userName, password, !(userName || password));
 };
 
