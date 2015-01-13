@@ -45,7 +45,7 @@
 
     <platform name="wp8">
 
-        <js-module name="AuthDialogs" src="www/AuthDialogs.js">
+        <js-module name="AuthDialog" src="www/authDialog.js">
             <runs />
         </js-module>
 
@@ -67,7 +67,7 @@
     </platform>
 
     <platform name="windows">
-        <js-module name="AuthDialogs" src="www/AuthDialogs.js">
+        <js-module name="AuthDialog" src="www/authDialog.js">
             <runs />
         </js-module>
     </platform>
