@@ -34,13 +34,11 @@ var app = {
     // deviceready Event Handler
     onDeviceReady: function() {
         document.getElementById('navigate').addEventListener('click', function () {
-            console.log('Navigating to ' + SECURED_PAGE);
             app.log('Navigating to ' + SECURED_PAGE);
             window.location = SECURED_PAGE;
         });
 
         document.getElementById('xhr').addEventListener('click', function () {
-            console.log('Making XHR to ' + SECURED_PAGE);
             app.log('Making XHR to ' + SECURED_PAGE);
             app.makeXHR(SECURED_PAGE);
         })
@@ -50,22 +48,27 @@ var app = {
         req.open('GET', host);
         req.onload = function (e) {
             var message = 'Got onload.\nreadyState: ' + e.target.readyState + ', HTTP status: ' + e.target.status;
-            console.log(message);
             app.log(message);
+
+            if (e.target.readyState == 4 && e.target.status == 200) {// success
+                app.log(e.target.responseText);
+            }
+
         };
         req.onerror = function (e) {
             var message = 'Got onerror.\nreadyState: ' + e.target.readyState + ', HTTP status: ' + e.target.status;
-            console.log(message);
             app.log(message);
         };
         req.onreadystatechange = function (e) {
             var message = 'Got onreadystatechange.\nreadyState: ' + e.target.readyState + ', HTTP status: ' + e.target.status;
-            console.log(message);
             app.log(message);
         };
         req.send();
     },
     log: function () {
+
+        console.log(arguments);
+
         var args = Array.prototype.slice.call(arguments);
         var data = args.map(function (arg) {
             return arg.toString();
