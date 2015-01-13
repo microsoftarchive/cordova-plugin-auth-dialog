@@ -41,6 +41,15 @@ var app = {
         document.getElementById('xhr').addEventListener('click', function () {
             app.log('Making XHR to ' + SECURED_PAGE);
             app.makeXHR(SECURED_PAGE);
+        });
+
+        document.getElementById('clear').addEventListener('click', function () {
+            document.querySelector('.log #log').textContent = '';
+        });
+
+        document.getElementById('authenticate').addEventListener('click', function () {
+            app.log('Authenticating uri: ' + SECURED_PAGE);
+            app.authenticate(SECURED_PAGE);
         })
     },
     makeXHR: function (host) {
@@ -53,7 +62,6 @@ var app = {
             if (e.target.readyState == 4 && e.target.status == 200) {// success
                 app.log(e.target.responseText);
             }
-
         };
         req.onerror = function (e) {
             var message = 'Got onerror.\nreadyState: ' + e.target.readyState + ', HTTP status: ' + e.target.status;
@@ -64,6 +72,17 @@ var app = {
             app.log(message);
         };
         req.send();
+    },
+    authenticate: function(host) {
+        if (cordova.platformId != 'ios') {
+            app.log('authDialog.authenticate is ios-specific and does not available on this platform');
+            return;
+        }
+        authDialog.authenticate(host, function () {
+            app.log('Successfully done!');
+        }, function (err) {
+            app.log('Error occured: ' + err);
+        });
     },
     log: function () {
 
