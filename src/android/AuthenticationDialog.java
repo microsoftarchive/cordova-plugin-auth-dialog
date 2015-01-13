@@ -1,4 +1,4 @@
-package com.msopentech.windowsauth;
+package com.msopentech.authdialog;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -15,7 +15,7 @@ import android.widget.TextView.OnEditorActionListener;
 /**
  * Implements authentication dialog.
  */
-public class HttpAuthenticationDialog {
+public class AuthenticationDialog {
 
     private final Context mContext;
 
@@ -32,7 +32,7 @@ public class HttpAuthenticationDialog {
     /**
      * Creates an HTTP authentication dialog.
      */
-    public HttpAuthenticationDialog(Context context, String host, String realm) {
+    public AuthenticationDialog(Context context, String host, String realm) {
         mContext = context;
         mHost = host;
         mRealm = realm;
