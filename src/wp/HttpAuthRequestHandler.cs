@@ -43,7 +43,7 @@ namespace io.cordova.hellocordova.Plugins.com.msopentech.authdialogs
                 return false;
             }
 
-            string authScript = "(function() {var xhr = new XMLHttpRequest();xhr.open('GET', '{0}', false, '{1}', '{2}');xhr.send();})()";
+            string authScript = "(function() {var xhr = new XMLHttpRequest();xhr.open('HEAD', '{0}', false, '{1}', '{2}');xhr.send();})()";
 
             authScript = authScript.Replace("{0}", uri.ToString());
             authScript = authScript.Replace("{1}", creds.username.Replace("\\", "\\\\"));
