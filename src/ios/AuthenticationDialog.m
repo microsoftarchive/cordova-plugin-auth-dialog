@@ -24,7 +24,10 @@
                                          timeoutInterval:60000.0];
 
     // use HEAD since it is faster than actial data retrieving (GET)
-    [request setHTTPMethod:@"HEAD"];
+    // this does not work due to WebView issue: http://stackoverflow.com/questions/25755555/stream-is-sending-an-event-before-being-opened
+    //[request setHTTPMethod:@"HEAD"];
+
+    [request setHTTPMethod:@"GET"];
 
     [NSURLConnection  connectionWithRequest:request delegate:self];
 }
