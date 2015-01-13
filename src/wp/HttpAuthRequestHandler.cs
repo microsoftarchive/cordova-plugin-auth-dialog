@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace io.cordova.hellocordova.Plugins.com.msopentech.authdialogs
+namespace com.msopentech.authdialog
 {
     /// <summary>
     /// Class for http auth support via XHR
@@ -15,7 +15,7 @@ namespace io.cordova.hellocordova.Plugins.com.msopentech.authdialogs
     {
         private Grid layoutRoot;
         private PhoneApplicationPage layoutPage;
-        private NotificationBox notifyBox;
+        private AuthenticationDialog authDialog;
         private TaskCompletionSource<Credentials> requestCredentialsTaskCompletionSource;
 
         public HttpAuthRequestHandler()
@@ -27,7 +27,7 @@ namespace io.cordova.hellocordova.Plugins.com.msopentech.authdialogs
             }
 
             layoutPage = getApplicationPage();
-            notifyBox = new NotificationBox();
+            authDialog = new AuthenticationDialog();
             requestCredentialsTaskCompletionSource = new TaskCompletionSource<Credentials>();
         }
 
@@ -64,12 +64,12 @@ namespace io.cordova.hellocordova.Plugins.com.msopentech.authdialogs
 
         public Task<Credentials> requestCredentials(Uri uri)
         {
-            notifyBox.SubTitle.Text = string.Format("Host {0} requests credentials", uri);
+            authDialog.SubTitle.Text = string.Format("Host {0} requests credentials", uri);
 
-            notifyBox.Login.Click += this.loginHandler;
+            authDialog.Login.Click += this.loginHandler;
             layoutPage.BackKeyPress += this.cancelHandler;
 
-            layoutRoot.Children.Add(notifyBox);
+            layoutRoot.Children.Add(authDialog);
 
             return requestCredentialsTaskCompletionSource.Task;
         }
@@ -78,10 +78,10 @@ namespace io.cordova.hellocordova.Plugins.com.msopentech.authdialogs
         {
             requestCredentialsTaskCompletionSource.TrySetCanceled();
 
-            Deployment.Current.Dispatcher.BeginInvoke(() => layoutRoot.Children.Remove(notifyBox));
+            Deployment.Current.Dispatcher.BeginInvoke(() => layoutRoot.Children.Remove(authDialog));
             e.Cancel = true;
 
-            notifyBox.Login.Click -= this.loginHandler;
+            authDialog.Login.Click -= this.loginHandler;
             layoutPage.BackKeyPress -= this.cancelHandler;
         }
 
@@ -89,14 +89,14 @@ namespace io.cordova.hellocordova.Plugins.com.msopentech.authdialogs
         {
             var creds = new Credentials
             {
-                username = notifyBox.Username.Text,
-                password = notifyBox.Password.Password
+                username = authDialog.Username.Text,
+                password = authDialog.Password.Password
             };
             requestCredentialsTaskCompletionSource.SetResult(creds);
 
-            Deployment.Current.Dispatcher.BeginInvoke(() => layoutRoot.Children.Remove(notifyBox));
+            Deployment.Current.Dispatcher.BeginInvoke(() => layoutRoot.Children.Remove(authDialog));
 
-            notifyBox.Login.Click -= this.loginHandler;
+            authDialog.Login.Click -= this.loginHandler;
             layoutPage.BackKeyPress -= this.cancelHandler;
         }
 

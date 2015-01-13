@@ -8,11 +8,11 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 
-namespace io.cordova.hellocordova.Plugins.com.msopentech.authdialogs
+namespace com.msopentech.authdialog
 {
-    public partial class NotificationBox : UserControl
+    public partial class AuthenticationDialog : UserControl
     {
-        public NotificationBox()
+        public AuthenticationDialog()
         {
             InitializeComponent();
         }

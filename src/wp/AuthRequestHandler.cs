@@ -12,7 +12,7 @@
     limitations under the License.
 */
 
-using io.cordova.hellocordova.Plugins.com.msopentech.authdialogs;
+using com.msopentech.authdialog;
 
 using Microsoft.Phone.Controls;
 using System.Diagnostics;
@@ -20,7 +20,7 @@ using System.Windows;
 
 namespace WPCordovaClassLib.Cordova.Commands
 {
-    public class AuthDialogs : BaseCommand
+    public class AuthRequestHandler : BaseCommand
     {
         public override void OnInit()
         {

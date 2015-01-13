@@ -13,7 +13,7 @@ function requestCredentials(uri, successCB, errorCB) {
     // In case of Windows phone 8 reuse native authentication dialog
     if (cordova.platformId === 'windowsphone') {
         var exec = cordova.require('cordova/exec');
-        exec(successCB, errorCB, 'AuthDialogs', 'requestCredentials', [uri]);
+        exec(successCB, errorCB, 'AuthDialog', 'requestCredentials', [uri]);
         return;
     }
 
