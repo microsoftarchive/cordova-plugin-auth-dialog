@@ -8,7 +8,7 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 
-namespace com.msopentech.authdialog
+namespace MSOpenTech.AuthDialog
 {
     public partial class AuthenticationDialog : UserControl
     {

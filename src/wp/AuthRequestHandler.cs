@@ -12,13 +12,11 @@
     limitations under the License.
 */
 
-using com.msopentech.authdialog;
-
 using Microsoft.Phone.Controls;
 using System.Diagnostics;
 using System.Windows;
 
-namespace WPCordovaClassLib.Cordova.Commands
+namespace MSOpenTech.AuthDialog
 {
     public class AuthRequestHandler : BaseCommand
     {

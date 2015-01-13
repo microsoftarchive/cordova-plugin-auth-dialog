@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace com.msopentech.authdialog
+namespace MSOpenTech.AuthDialog
 {
     /// <summary>
     /// Class for http auth support via XHR

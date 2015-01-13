@@ -55,7 +55,7 @@
 
         <config-file target="config.xml" parent="/*">
             <feature name="AuthDialog">
-                <param name="wp-package" value="AuthRequestHandler"/>
+                <param name="wp-package" value="MSOpenTech.AuthDialog.AuthRequestHandler"/>
                 <param name="onload" value="true" /> 
             </feature>
         </config-file>
