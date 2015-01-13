@@ -17,7 +17,7 @@
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="AuthDialog"> 
-                <param name="android-package" value="com.msopentech.authdialog.AuthRequestHandler"/>
+                <param name="android-package" value="com.msopentech.authDialog.AuthRequestHandler"/>
                 <param name="onload" value="true" />
             </feature>
         </config-file>

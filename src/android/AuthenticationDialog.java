@@ -1,4 +1,4 @@
-package com.msopentech.authdialog;
+package com.msopentech.authDialog;
 
 import android.app.AlertDialog;
 import android.content.Context;

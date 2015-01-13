@@ -1,4 +1,4 @@
-package com.msopentech.authdialog;
+package com.msopentech.authDialog;
 
 import android.webkit.HttpAuthHandler;
 import android.webkit.WebView;
