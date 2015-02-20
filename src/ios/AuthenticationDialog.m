@@ -32,6 +32,21 @@
     [NSURLConnection  connectionWithRequest:request delegate:self];
 }
 
+-(void)clearCredentials:(CDVInvokedUrlCommand*) command
+{
+    NSDictionary* credentialsDict = [[NSURLCredentialStorage sharedCredentialStorage] allCredentials];
+    
+    for (NSURLProtectionSpace* protectionSpace in credentialsDict){
+        NSDictionary* userNameDict = credentialsDict[protectionSpace];
+        for (NSString* userName in userNameDict){
+            NSURLCredential* credential = userNameDict[userName];
+            [[NSURLCredentialStorage sharedCredentialStorage] removeCredential:credential forProtectionSpace:protectionSpace];
+        }
+    }
+    
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+}
+
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     CDVPluginResult* errorResult;
     if (error.code == NSURLErrorUserCancelledAuthentication) {
