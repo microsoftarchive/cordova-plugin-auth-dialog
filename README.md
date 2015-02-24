@@ -34,7 +34,7 @@ Requires manually executing the following method before accessing protected spac
 
 ```authDialog.authenticate(uri, /*optional*/ successCallback, /*optional*/ errorCallback,  /*optional*/ userName,  /*optional*/ password,  /*optional*/ maxAttempts)```
 
-Credentials are automatically cached by UIWebView so you do NOT need to enter them every app start. In this case ```authDialog.authenticate``` is executed w/o showing any cridentials pop-up dialog.
+Credentials are automatically cached by UIWebView so you do NOT need to enter them every app start. In this case ```authDialog.authenticate``` is executed w/o showing any credentials pop-up dialog.
 
 After authentication is you can do XmlHttpRequests or display protected space via ```window.location = 'some protected uri' ``` or using InAppBrowser plugin.
 
@@ -44,7 +44,7 @@ On Windows Tablet/PC (Windows 8.0 and Windows 8.1) native authentication dialog 
 
 On Windows Phone 8.1 authentication dialog is automatically showed for XmlHttpRequests only, InAppBrowser plugin is NOT currently supported.
 
-Plugin overrides default XmlHttpRequest via custom wrapper based on original one to automatically show cridentials dialog when it is necessary. Credentials dialog is html based and does not support hardware back button.
+Plugin overrides default XmlHttpRequest via custom wrapper based on original one to automatically show credentials dialog when it is necessary. Credentials dialog is html based and does not support hardware back button.
 
 Credentials are NOT persisted between app sessions so you need to enter them once per application start.
 

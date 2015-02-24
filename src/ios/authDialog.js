@@ -25,7 +25,7 @@ function authenticateOnce (uri, successCallback, errorCallback, userName, passwo
     cordova.exec(successCallback, errorCallback, 'AuthDialog', 'authenticate', [uri, userName, password, allowBypassAuth]);
 }
 
-authDialog.authenticate = function (uri, successCallback, /*optional*/ errorCallback,  /*optional*/ userName,  /*optional*/ password,  /*optional*/ maxAttempts) {
+authDialog.authenticate = function (uri, /*optional*/ successCallback, /*optional*/ errorCallback,  /*optional*/ userName,  /*optional*/ password,  /*optional*/ maxAttempts) {
     
     if (!uri) {
         throw new Error('Uri is not specified');
@@ -46,14 +46,14 @@ authDialog.authenticate = function (uri, successCallback, /*optional*/ errorCall
         }
         
         // if first attemp has failed then user name and password are invalid
-        // so we should ask user to provide another cridentials so we don't pass user/password
+        // so we should ask user to provide another credentials so we don't pass user/password
         setTimeout(function() {
              authenticateOnce (uri, successCallback, onError, null, null, false);
         });
     };
     
     // allowBypass specifies whether app should try to resolve authentication challenge automatically
-    // first (cached cridentials). This should be done only if no user and password are provided;
+    // first (cached credentials). This should be done only if no user and password are provided;
     // this makes it possible to avoid passing credentials every app start
     authenticateOnce (uri, successCallback, onError, userName, password, !(userName || password));
 };
