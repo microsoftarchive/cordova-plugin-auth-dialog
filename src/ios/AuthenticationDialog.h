@@ -26,7 +26,7 @@ typedef void (^CredentialsViewCallback)(NSString* userName, NSString* password, 
 
 @property (copy) CredentialsViewCallback onResult;
 
-- (void) requestUserCridentials: (NSString*) uri;
+- (void) requestUserCredentials: (NSString*) uri;
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;
 

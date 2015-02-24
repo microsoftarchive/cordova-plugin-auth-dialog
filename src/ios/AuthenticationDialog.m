@@ -89,9 +89,9 @@ CredentialsViewController * credentialsViewController;
 {
     NSLog(@"AuthDialog: willSendRequestForAuthenticationChallenge %@", challenge.protectionSpace);
  
-    // if no cridentials are passed during first authentication attempt then
-    // try to pass challenge automatically (using cached cridentials)
-    // this makes it possible to avoid passing cridentials every app start
+    // if no credentials are passed during first authentication attempt then
+    // try to pass challenge automatically (using cached credentials)
+    // this makes it possible to avoid passing credentials every app start
     if ([challenge previousFailureCount] == 0 && self.allowBypassAuth) {
         [[challenge sender] continueWithoutCredentialForAuthenticationChallenge:challenge];
         return;
@@ -100,14 +100,14 @@ CredentialsViewController * credentialsViewController;
     if ([challenge previousFailureCount] == 0 && [self isSupportedAuthMethod: challenge.protectionSpace.authenticationMethod])
     {
 
-        // use predefined cridentials if provided
+        // use predefined credentials if provided
         if (![self.userName isEqual:[NSNull null]] && ![self.password isEqual:[NSNull null]]) {
                 
             [[challenge sender] useCredential:[NSURLCredential credentialWithUser:self.userName
                                                                              password:self.password
                                                                       persistence:NSURLCredentialPersistencePermanent]
                        forAuthenticationChallenge:challenge];
-        } else { // request cridentials
+        } else { // request credentials
             credentialsViewController = [[CredentialsViewController alloc] init];
                 
             credentialsViewController.onResult = ^(NSString * userName, NSString* password, BOOL isCancelled)  {
@@ -124,7 +124,7 @@ CredentialsViewController * credentialsViewController;
                 }
             };
                 
-            [credentialsViewController requestUserCridentials:self.uri];
+            [credentialsViewController requestUserCredentials:self.uri];
         }
     }
     else
@@ -137,7 +137,7 @@ CredentialsViewController * credentialsViewController;
 
 @implementation CredentialsViewController {}
 
-- (void) requestUserCridentials: (NSString*) uri
+- (void) requestUserCredentials: (NSString*) uri
 {
     
     // TODO consider using UIAlertController (available starting from iOS 8.0)
