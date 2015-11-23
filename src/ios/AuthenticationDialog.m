@@ -153,4 +153,10 @@ CredentialsViewController * credentialsViewController;
     self.onResult(username.text, password.text, false);
 }
 
+- (void)didPresentAlertView:(UIAlertView *)alertView
+{
+    //show keyboard on iOS 8
+    [[alertView textFieldAtIndex:0] selectAll:nil];
+}
+
 @end
