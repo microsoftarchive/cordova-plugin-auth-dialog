@@ -6,7 +6,7 @@
 #import <Foundation/Foundation.h>
 #import <Cordova/CDVPlugin.h>
 
-@interface AuthenticationDialog: CDVPlugin <NSURLConnectionDataDelegate>
+@interface AuthenticationDialog: CDVPlugin <NSURLConnectionDataDelegate, NSURLSessionDelegate, NSURLSessionTaskDelegate, NSURLSessionDataDelegate>
 
 @property NSString *uri;
 @property NSString *userName;
@@ -27,7 +27,5 @@ typedef void (^CredentialsViewCallback)(NSString* userName, NSString* password, 
 @property (copy) CredentialsViewCallback onResult;
 
 - (void) requestUserCredentials: (NSString*) uri;
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;
 
 @end
