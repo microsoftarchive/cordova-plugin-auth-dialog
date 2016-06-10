@@ -58,6 +58,10 @@ Credentials are NOT persisted between app sessions so you need to enter them onc
 
 There is a known issue with XmlHttpRequest to secured sites: When request receives a response with status 401 and "WWW-Authenticate" header, the whole Javascript layer freezes. This makes this plugin and XHR unusable for accessing resources that requires authentication on WP8 devices. However WP8.1 is not affected by this issue.
 
+## To-do
+- [x] Enable credential storage for just the session
+- [ ] Clear credential storage manually
+
 ## Copyrights ##
 Copyright (c) Microsoft Open Technologies, Inc. All rights reserved.
 
