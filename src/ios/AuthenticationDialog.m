@@ -55,7 +55,7 @@
         // use predefined credentials if provided
         if (![self.userName isEqual:[NSNull null]] && ![self.password isEqual:[NSNull null]]) {
             NSLog(@"Use username and password from args");
-            completionHandler(NSURLSessionAuthChallengeUseCredential, [NSURLCredential credentialWithUser:self.userName password:self.password persistence:NSURLCredentialPersistencePermanent]);
+            completionHandler(NSURLSessionAuthChallengeUseCredential, [NSURLCredential credentialWithUser:self.userName password:self.password persistence:NSURLCredentialPersistenceForSession]);
         } else { // request credentials
             credentialsViewController = [[CredentialsViewController alloc] init];
             
@@ -68,7 +68,7 @@
                     completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
                 } else {
                     NSLog(@"Use username and password from view controller");
-                    completionHandler(NSURLSessionAuthChallengeUseCredential, [NSURLCredential credentialWithUser:userName password:password persistence:NSURLCredentialPersistencePermanent]);
+                    completionHandler(NSURLSessionAuthChallengeUseCredential, [NSURLCredential credentialWithUser:userName password:password persistence:NSURLCredentialPersistenceForSession]);
                 }
             };
             
