@@ -127,7 +127,7 @@ CredentialsViewController * credentialsViewController;
     
     // TODO consider using UIAlertController (available starting from iOS 8.0)
     UIAlertView* view = [[UIAlertView alloc] initWithTitle:@"Authentication Required"
-                       message: uri
+                       message: @"Please enter your username and password."
                       delegate: self
              cancelButtonTitle:@"Cancel"
              otherButtonTitles:nil];
