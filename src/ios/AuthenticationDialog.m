@@ -45,9 +45,9 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
     CDVPluginResult* pluginResult;
-    
+
     NSInteger statusCode = [((NSHTTPURLResponse *)response) statusCode];
-    
+
     // 405 means 'Mehod not allowed' which is totally ok to understand
     // we have successfully passed authentication
     if (statusCode == 200 || statusCode == 405) {
@@ -73,7 +73,7 @@ CredentialsViewController * credentialsViewController;
 - (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
     NSLog(@"AuthDialog: willSendRequestForAuthenticationChallenge %@", challenge.protectionSpace);
- 
+
     // if no credentials are passed during first authentication attempt then
     // try to pass challenge automatically (using cached credentials)
     // this makes it possible to avoid passing credentials every app start
@@ -81,34 +81,34 @@ CredentialsViewController * credentialsViewController;
         [[challenge sender] continueWithoutCredentialForAuthenticationChallenge:challenge];
         return;
     }
-    
+
     if ([challenge previousFailureCount] == 0 && [self isSupportedAuthMethod: challenge.protectionSpace.authenticationMethod])
     {
 
         // use predefined credentials if provided
         if (![self.userName isEqual:[NSNull null]] && ![self.password isEqual:[NSNull null]]) {
-                
+
             [[challenge sender] useCredential:[NSURLCredential credentialWithUser:self.userName
                                                                              password:self.password
-                                                                      persistence:NSURLCredentialPersistenceForSession]
+                                                                    persistence:NSURLCredentialPersistenceForSession]
                        forAuthenticationChallenge:challenge];
         } else { // request credentials
             credentialsViewController = [[CredentialsViewController alloc] init];
-                
+
             credentialsViewController.onResult = ^(NSString * userName, NSString* password, BOOL isCancelled)  {
-                    
+
                 credentialsViewController = NULL;
-                    
+
                 if (isCancelled) {
                     [[challenge sender] cancelAuthenticationChallenge:challenge];
                 } else {
                     [[challenge sender] useCredential:[NSURLCredential credentialWithUser:userName
                                                                                      password:password
-                                                                                  persistence:NSURLCredentialPersistenceForSession]
+                                                                                persistence:NSURLCredentialPersistenceForSession]
                             forAuthenticationChallenge:challenge];
                 }
             };
-                
+
             [credentialsViewController requestUserCredentials:self.uri];
         }
     }
@@ -124,18 +124,18 @@ CredentialsViewController * credentialsViewController;
 
 - (void) requestUserCredentials: (NSString*) uri
 {
-    
+
     // TODO consider using UIAlertController (available starting from iOS 8.0)
     UIAlertView* view = [[UIAlertView alloc] initWithTitle:@"Authentication Required"
                        message: @"Please enter your username and password."
                       delegate: self
              cancelButtonTitle:@"Cancel"
              otherButtonTitles:nil];
-    
+
     view.alertViewStyle = UIAlertViewStyleLoginAndPasswordInput;
-    
+
     [view addButtonWithTitle:@"Log In"];
-    
+
     [view show];
 }
 
@@ -146,7 +146,7 @@ CredentialsViewController * credentialsViewController;
         self.onResult(NULL, NULL, true);
         return;
     }
-    
+
     UITextField *username = [alertView textFieldAtIndex:0];
     UITextField *password = [alertView textFieldAtIndex:1];
 
