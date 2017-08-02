@@ -1,0 +1,17 @@
+{
+  "name": "cordova-plugin-auth-dialog",
+  "version": "1.0.0",
+  "description": "Apache Cordova Auth Dialog ============================= Adds support for authentication dialogs into Apache Cordova.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HootsuiteLabs/cordova-plugin-auth-dialog.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HootsuiteLabs/cordova-plugin-auth-dialog/issues"
+  },
+  "homepage": "https://github.com/HootsuiteLabs/cordova-plugin-auth-dialog#readme"
+}
